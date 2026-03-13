@@ -446,6 +446,72 @@
             text-align: center;
             gap: 20px;
         }
+        /* === SIDEBAR ACCOUNT SECTION === */
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+#history-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+#history-box::-webkit-scrollbar {
+    width: 3px;
+}
+
+#history-box::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 10px;
+}
+
+#history-box .history-item {
+    padding: 12px 15px;
+    margin: 5px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--text-sec);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    font-size: 13px;
+}
+
+#history-box .history-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+    display: block;
+}
+
+#history-box .history-item i {
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-size: 12px;
+}
+
+#history-box .history-item:hover {
+    background: var(--glass-ultra);
+    border-color: var(--glass-border);
+    padding-left: 20px;
+    color: var(--accent-cyan);
+}
+
+#history-box .history-item:hover i {
+    opacity: 1;
+}
+
+#history-box .history-item.active-chat {
+    background: rgba(124, 77, 255, 0.2) !important;
+    color: #fff !important;
+    border-left: 4px solid var(--accent-cyan) !important;
+    padding-left: 11px !important;
+}
     </style>
 </head>
 <body>
@@ -472,6 +538,7 @@
 </div>
 
 <!-- === SIDEBAR === -->
+<!-- === SIDEBAR === -->
 <aside id="sidebar">
     <div style="padding: 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between;">
         <h2 style="font-size: 14px; color: var(--accent-cyan);">XOTIRA ARXIVI</h2>
@@ -479,33 +546,45 @@
             <i class="fas fa-chevron-left"></i>
         </button>
     </div>
-    <div id="history-box"></div>
-    <div style="padding: 20px; border-top: 1px solid var(--glass-border);">
-        <p id="u-mail" style="font-size: 12px; margin-bottom: 10px;"></p>
-        <div id="memory-stats">
-            <i class="fas fa-database"></i> Xotira: 0 xulosa
+    
+    <!-- HISTORY BOX - faqat historylar -->
+    <div id="history-box" style="flex: 1; overflow-y: auto; padding: 15px;"></div>
+    
+<!-- ACCOUNT SECTION - email bosh harfi bilan -->
+<div style="padding: 20px; border-top: 1px solid var(--glass-border);">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+        <!-- Email bosh harfi ko'rinadigan doira (icon o'rniga) -->
+        <div id="user-initial" style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #000; text-transform: uppercase; box-shadow: 0 4px 10px rgba(124, 77, 255, 0.3);">
+            ?
         </div>
-        <div id="memory-quality" style="display: none;">
-            <i class="fas fa-chart-line"></i> Sifat: <span id="quality-score">0%</span>
+        <div style="flex: 1;">
+            <p id="u-mail" style="font-size: 13px; font-weight: 500; color: white; margin-bottom: 2px;"></p>
+            <p style="font-size: 11px; color: var(--text-sec);">Hisob</p>
         </div>
-        <button onclick="logout()" style="width:100%; padding:10px; border-radius:10px; border:none; background:rgba(255,0,0,0.1); color:red; cursor:pointer;">HISOBDAN CHIQISH</button>
     </div>
+    
+    <!-- FAQAT HISOBDAN CHIQISH TUGMASI -->
+    <button onclick="logout()" style="width:100%; padding: 12px; border-radius: 12px; border: none; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease;">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>HISOBDAN CHIQISH</span>
+    </button>
+</div>
 </aside>
 
 <!-- === MAIN CONTENT === -->
 <div id="main">
-    <header>
-        <button onclick="toggleSidebar()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">
-            <i class="fas fa-bars-staggered"></i>
-        </button>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <img src="mr.png" style="width:30px; height:30px; object-fit:contain;" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 24 24\' fill=\'%237c4dff\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z\'/></svg>'">
-            <h2 id="chat-header-title" style="font-size:16px;">MR AI</h2>
-        </div>
-        <button onclick="createNewChat()" style="background:none; border:none; color:var(--accent-cyan); font-size:20px; cursor:pointer;">
-            <i class="fas fa-edit"></i>
-        </button>
-    </header>
+<header>
+    <button onclick="toggleSidebar()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">
+        <i class="fas fa-bars-staggered"></i>
+    </button>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <img src="mr.png" style="width:32px; height:32px; object-fit:contain;" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\' fill=\'%237c4dff\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z\'/></svg>'">
+        <h2 id="chat-header-title" style="font-size:18px; font-weight:600; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MR AI</h2>
+    </div>
+    <button onclick="createNewChat()" style="background:none; border:none; color:var(--accent-cyan); font-size:20px; cursor:pointer;">
+        <i class="fas fa-edit"></i>
+    </button>
+</header>
     
     <div id="chat-window"></div>
     
@@ -551,7 +630,7 @@
 </div>
 
 <script>
-// ==================== FIREBASE KONFIGURATSIYASI ====================
+// ==================== FIREBASE KONFIGURATSIYASI (TO'G'RI) ====================
 const firebaseConfig = {
   apiKey: "AIzaSyDIAmMQNh8aJqnX_xXE4XhzRkssi6UZgxs",
   authDomain: "mrtube-4ebaf.firebaseapp.com",
@@ -614,7 +693,6 @@ const MODES = {
         prompt: `EKSPERT rejim. LaTeX formulalardan foydalaning. Chuqur tahlil qiling.`
     }
 };
-
 // ==================== FIREBASE INIT ====================
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -623,28 +701,22 @@ const db = firebase.firestore();
 // ==================== GLOBAL O'ZGARUVCHILAR ====================
 let currentUser = null;
 let currentChatId = null;
+let messageCounter = 0; // Xabarlar sonini sanash uchun
 let chatHistory = [];
 let abortController = null;
+let chatKeys = {};
 let memoryCache = {
     context: '',
     timestamp: 0,
     summaries: []
 };
-
-// AUDIO PLAYER UCHUN GLOBAL O'ZGARUVCHILAR
-let currentUtterance = null;
-let currentInterval = null;
-let isAudioPaused = false;
-let currentText = '';
-let currentSpeakerBtn = null;
-
 // ==================== API KEY MANAGER ====================
 class APIKeyManager {
     constructor() {
         this.keyPairs = [];
         this.currentIndex = 0;
         this.failedKeys = new Set();
-        this.maxRetriesPerKey = 2;
+        this.maxRetriesPerKey = 3;
     }
 
     loadKeys(keysData) {
@@ -674,36 +746,18 @@ class APIKeyManager {
     getNextKeyPair() {
         if (this.keyPairs.length === 0) return null;
         
-        // Aktiv keylarni filtrlash
+        // Aktiv juftlarni filtrlash
         const activePairs = this.keyPairs.filter(p => p.isActive);
         if (activePairs.length === 0) {
-            // Hammasi fails bo'lsa, reset qilish
-            this.resetAllKeys();
+            // Hammasi bloklangan bo'lsa, ularni qayta aktivlashtirish
+            this.keyPairs.forEach(p => { p.isActive = true; p.failCount = 0; });
             return this.keyPairs[0];
         }
-        
-        // Round-robin bo'yicha key olish
+
+        // Round‑robin bo‘yicha navbatdagi juftni olish
         const pair = activePairs[this.currentIndex % activePairs.length];
         this.currentIndex = (this.currentIndex + 1) % activePairs.length;
         return pair;
-    }
-
-    markKeyFailed(pairIndex) {
-        const pair = this.keyPairs.find(p => p.index === pairIndex);
-        if (pair) {
-            pair.failCount++;
-            if (pair.failCount >= this.maxRetriesPerKey) {
-                pair.isActive = false;
-                console.log(`⚠️ API key ${pairIndex} vaqtincha bloklandi`);
-                
-                // 5 daqiqadan so'ng qayta aktivlash
-                setTimeout(() => {
-                    pair.isActive = true;
-                    pair.failCount = 0;
-                    console.log(`🔄 API key ${pairIndex} qayta aktivlashtirildi`);
-                }, 5 * 60 * 1000);
-            }
-        }
     }
 
     markKeySuccess(pairIndex) {
@@ -714,48 +768,90 @@ class APIKeyManager {
         }
     }
 
-    resetAllKeys() {
-        this.keyPairs.forEach(pair => {
-            pair.isActive = true;
-            pair.failCount = 0;
-        });
-        console.log("🔄 Barcha API keylar qayta aktivlashtirildi");
+    markKeyFailed(pairIndex) {
+        const pair = this.keyPairs.find(p => p.index === pairIndex);
+        if (pair) {
+            pair.failCount++;
+            if (pair.failCount >= this.maxRetriesPerKey) {
+                pair.isActive = false;
+                console.log(`⚠️ API key ${pairIndex} vaqtincha bloklandi (5 daqiqa)`);
+                
+                setTimeout(() => {
+                    pair.isActive = true;
+                    pair.failCount = 0;
+                    console.log(`🔄 API key ${pairIndex} qayta aktivlashtirildi`);
+                }, 5 * 60 * 1000);
+            }
+        }
     }
 
     isRateLimitError(error) {
-        const errorMsg = error.message?.toLowerCase() || '';
-        return errorMsg.includes('rate limit') || 
-               errorMsg.includes('429') || 
-               errorMsg.includes('too many requests') ||
-               errorMsg.includes('quota exceeded');
+        const msg = error.message?.toLowerCase() || '';
+        return msg.includes('rate limit') || msg.includes('429') || msg.includes('too many requests');
     }
 }
 
+// Global API manager yaratish
 const apiKeyManager = new APIKeyManager();
+// AUDIO PLAYER UCHUN GLOBAL O'ZGARUVCHILAR
+let currentUtterance = null;
+let currentInterval = null;
+let isAudioPaused = false;
+let currentText = '';
+let currentSpeakerBtn = null;
 
+// ==================== AUTH OBSERVER ====================
+// ==================== AUTH OBSERVER ====================
+auth.onAuthStateChanged(async user => {
+    if (user) {
+        currentUser = user;
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('u-mail').innerText = user.email;
+        
+        // Email bosh harfini olish va ko'rsatish
+        const initial = user.email.charAt(0).toUpperCase();
+        const initialElement = document.getElementById('user-initial');
+        if (initialElement) {
+            initialElement.innerText = initial;
+        }
+        
+        await loadAPIKeys();
+        await initUserMemory();
+        await loadHistory();
+        await updateMemoryStats();
+        createNewChat();
+    } else {
+        document.getElementById('auth-screen').style.display = 'flex';
+    }
+});
+
+// ==================== API KALITLARNI YUKLASH ====================
 // ==================== API KALITLARNI YUKLASH ====================
 async function loadAPIKeys() {
     try {
         const keysDoc = await db.collection('configs').doc('api_keys').get();
         if (keysDoc.exists) {
-            const keysData = keysDoc.data();
-            chatKeys = keysData; // Eski kod bilan moslik uchun
-            
-            const success = apiKeyManager.loadKeys(keysData);
-            if (!success) {
-                console.warn("⚠️ API keylar topilmadi, fallback rejim ishga tushdi");
-            }
-            return success;
+            const data = keysDoc.data();
+            chatKeys = data;   // eski kod bilan moslik uchun
+            apiKeyManager.loadKeys(data);
+            console.log("✅ API kalitlar yuklandi");
         } else {
             console.error("❌ API kalitlar topilmadi!");
-            return false;
+            // Test kalitlari (faqat ishlab chiqish uchun)
+            chatKeys = {
+                gk_chat_1: "gsk_test_chat_1",
+                gk_sum_1: "gsk_test_sum_1",
+                last_index: 1,
+                total_pairs: 1
+            };
+            apiKeyManager.loadKeys(chatKeys);
         }
     } catch (e) {
         console.error("Kalitlarni yuklashda xato:", e);
-        return false;
     }
 }
 
+// ==================== FOYDALANUVCHI XOTIRASINI YARATISH ====================
 // ==================== FOYDALANUVCHI XOTIRASINI YARATISH ====================
 async function initUserMemory() {
     if (!currentUser) return;
@@ -763,6 +859,7 @@ async function initUserMemory() {
     const userDoc = await userRef.get();
     
     if (!userDoc.exists) {
+        // Yangi foydalanuvchi - email dan ism yaratish
         const defaultName = currentUser.email.split('@')[0];
         
         await userRef.set({
@@ -781,6 +878,7 @@ async function initUserMemory() {
         
         currentUser.displayName = defaultName;
     } else {
+        // MAVJUD FOYDALANUVCHI - FIREBASEDAGI ISMNI OLISH
         const firebaseName = userDoc.data().displayName;
         currentUser.displayName = firebaseName || currentUser.email.split('@')[0];
         
@@ -789,6 +887,7 @@ async function initUserMemory() {
 }
 
 // ==================== XOTIRA STATISTIKASINI YANGILASH ====================
+// ==================== XOTIRA STATISTIKASINI YANGILASH (FAQAT MEMORY UCHUN) ====================
 async function updateMemoryStats() {
     if (!currentUser) return;
     try {
@@ -810,24 +909,20 @@ async function updateMemoryStats() {
         
         const avgImportance = count > 0 ? (totalImportance / count).toFixed(2) : 0;
         
-        let statsHtml = `<i class="fas fa-database"></i> Xotira: ${count} xulosa<br>`;
-        statsHtml += `<small>L0:${levelCounts[0] || 0} L1:${levelCounts[1] || 0} L2:${levelCounts[2] || 0}</small><br>`;
-        statsHtml += `<small>⭐ Sifat: ${(avgImportance * 100).toFixed(0)}%</small>`;
+        // ENDI SIDEBARDA KO'RSATMAYMIZ, FAQAT KONSOLGA YOZAMIZ
+        console.log(`📊 Xotira statistikasi: ${count} xulosa, L0:${levelCounts[0] || 0} L1:${levelCounts[1] || 0} L2:${levelCounts[2] || 0}, Sifat: ${(avgImportance * 100).toFixed(0)}%`);
         
-        document.getElementById('memory-stats').innerHTML = statsHtml;
-        
+        // memory-quality elementlarini yashirish (agar kerak bo'lmasa)
         const qualityEl = document.getElementById('memory-quality');
-        const qualityScoreEl = document.getElementById('quality-score');
-        if (qualityScoreEl) {
-            qualityScoreEl.innerText = (avgImportance * 100).toFixed(0) + '%';
-            qualityEl.style.display = 'block';
+        if (qualityEl) {
+            qualityEl.style.display = 'none';
         }
         
     } catch (e) {
         console.error("Xotira statistikasini yangilashda xato:", e);
     }
 }
-
+// ==================== GLOBAL XOTIRANI YANGILASH ====================
 // ==================== GLOBAL XOTIRANI YANGILASH ====================
 async function updateGlobalMemory(userId, newSummary, metadata = {}) {
     try {
@@ -878,7 +973,6 @@ async function updateGlobalMemory(userId, newSummary, metadata = {}) {
         console.error("Global xotirani yangilashda xato:", e);
     }
 }
-
 // ==================== XULOSANI QISQARTIRISH ====================
 async function compressSummary(longSummary, apiKey) {
     try {
@@ -943,7 +1037,6 @@ async function detectTopic(message, summaryKey) {
         return { main: 'general', keywords: [] };
     }
 }
-
 // ==================== XOTIRA BLOKI YARATISH ====================
 async function createMemoryBlock(userMessage, aiMessage, summaryKey) {
     if (!currentUser || !summaryKey) return;
@@ -1025,6 +1118,7 @@ Quyidagi formatda JAVOB bering (JSON):
     }
 }
 
+// ==================== AGREGATSIYA ====================
 // ==================== AGREGATSIYA ====================
 async function checkAndAggregateSummaries(summaryKey) {
     if (!currentUser || !summaryKey) return;
@@ -1125,6 +1219,7 @@ Format (JSON):
 }
 
 // ==================== RELEVANCE SCORING ====================
+// ==================== RELEVANCE SCORING ====================
 async function getRelevantSummaries(currentMessage) {
     if (!currentUser) return [];
     
@@ -1195,6 +1290,25 @@ function calculateRelevance(summary, topicInfo) {
     
     return Math.min(score, 1);
 }
+function calculateRelevance(summary, topicInfo) {
+    let score = 0;
+    const topicMatch = summary.metadata?.topic === topicInfo.main ? 1 : 0;
+    score += topicMatch * 0.4;
+    
+    const summaryKeywords = summary.metadata?.keywords || [];
+    const keywordOverlap = summaryKeywords.filter(k => topicInfo.keywords.includes(k)).length;
+    const keywordScore = Math.min(keywordOverlap / 3, 1);
+    score += keywordScore * 0.3;
+    
+    score += (summary.importance || 0.5) * 0.2;
+    
+    const age = Date.now() - (summary.timestamp?.toDate?.() || new Date());
+    const ageInDays = age / (1000 * 3600 * 24);
+    const freshness = Math.max(0, 1 - (ageInDays / 7));
+    score += freshness * 0.1;
+    
+    return Math.min(score, 1);
+}
 
 // ==================== XOTIRA KONTEKSTINI QURISH ====================
 async function buildMemoryContext(currentMessage) {
@@ -1245,7 +1359,10 @@ async function buildMemoryContext(currentMessage) {
 }
 
 // ==================== SISTEM PROMPT ====================
+// ==================== SISTEM PROMPT (FAQAT FIREBASE) ====================
+// ==================== SISTEM PROMPT ====================
 function getSystemPrompt() {
+    // FAQAT Firebase dan oladi
     const name = currentUser?.displayName || currentUser?.email?.split('@')[0] || "do'stim";
     const now = new Date();
     const dateStr = now.toLocaleDateString('uz-UZ');
@@ -1265,7 +1382,6 @@ MUHIM QOIDALAR:
 4. Jadval, ro'yxat va kod bloklaridan unumli foydalaning.
 5. Suhbat qaysi tilda bo'lsa, o'sha tilda samimiy va aniq javob bering.`;
 }
-
 // ==================== KENGAYTIRILGAN SISTEM PROMPT ====================
 async function getEnhancedSystemPrompt(currentMessage) {
     const basePrompt = getSystemPrompt();
@@ -1295,13 +1411,8 @@ function showWelcomeScreen() {
     welcome.className = 'welcome-animation';
     welcome.innerHTML = `
         <h1 style="font-size: 3rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;">MR AI</h1>
-        <p style="color: var(--text-sec); font-size: 1.1rem;">Cheksiz xotira bilan suhbatlashing</p>
-        <div class="memory-indicator"><i class="fas fa-brain"></i> Xotira faol</div>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-            <span class="memory-indicator"><i class="fas fa-bolt"></i> Tezkor</span>
-            <span class="memory-indicator"><i class="fas fa-brain"></i> Fikrlovchi</span>
-            <span class="memory-indicator"><i class="fas fa-star"></i> Ekspert</span>
-        </div>
+        <p style="color: var(--text-sec); font-size: 1.1rem;">MR AI endi shunchaki yordamchi emas, u sizning hamkoringiz.</p>
+     
     `;
     win.appendChild(welcome);
 }
@@ -1381,7 +1492,7 @@ async function switchChat(id) {
     }
 }
 
-// ==================== XABAR RENDER ====================
+// ==================== XABAR RENDER (TYPING ANIMATION) ====================
 async function renderMsg(t, role, isHistory = false) {
     const win = document.getElementById('chat-window');
     
@@ -1414,6 +1525,7 @@ async function renderMsg(t, role, isHistory = false) {
         if (window.MathJax) MathJax.typesetPromise([textElement]).catch(() => {});
         if (role === 'user') win.scrollTop = win.scrollHeight;
     } else {
+        // TYPING ANIMATION
         let i = 0;
         function type() {
             if (abortController?.signal.aborted) {
@@ -1443,6 +1555,7 @@ async function renderMsg(t, role, isHistory = false) {
     }
 }
 
+// ==================== XABAR YUBORISH ====================
 // ==================== XABAR YUBORISH (5 TA KEY BILAN) ====================
 async function sendMessage() {
     const input = document.getElementById('user-input');
@@ -1458,20 +1571,17 @@ async function sendMessage() {
     if (abortController) abortController.abort();
     abortController = new AbortController();
 
-    let lastError = null;
     let attempts = 0;
-    const maxAttempts = apiKeyManager.keyPairs.length * 2; // Barcha keylarni 2 marta sinash
+    const maxAttempts = (apiKeyManager.keyPairs.length || 1) * 2; // barcha keylarni ikki marta sinash
 
     while (attempts < maxAttempts) {
         try {
-            // Keyingi API key juftini olish
             const keyPair = apiKeyManager.getNextKeyPair();
-            
             if (!keyPair) {
-                throw new Error("API kalit topilmadi!");
+                throw new Error("API kalit topilmadi");
             }
 
-            console.log(`🔄 Urinish ${attempts + 1}: API key ${keyPair.index} ishlatilmoqda`);
+            console.log(`🔄 Urinish ${attempts+1}: API key ${keyPair.index} ishlatilmoqda`);
 
             const activeMode = MODES[currentMode];
             const systemPrompt = await getEnhancedSystemPrompt(message);
@@ -1482,7 +1592,7 @@ async function sendMessage() {
                 { role: 'user', content: message }
             ];
 
-            // CHAT SO'ROVI
+            // CHAT SO‘ROVI
             const response = await fetch(PROVIDERS.chat.url, {
                 method: "POST",
                 headers: {
@@ -1500,31 +1610,20 @@ async function sendMessage() {
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                const errorMsg = errorData.error?.message || `HTTP xato: ${response.status}`;
-                throw new Error(errorMsg);
+                throw new Error(errorData.error?.message || `HTTP xato ${response.status}`);
             }
 
             const data = await response.json();
             const aiText = data.choices?.[0]?.message?.content || "AI javob bermadi...";
 
-            // Muvaffaqiyatli javob
             renderMsg(aiText, 'ai');
-            
+
             chatHistory.push({ role: 'user', content: message });
             chatHistory.push({ role: 'assistant', content: aiText });
 
-            // Keyni muvaffaqiyatli deb belgilash
             apiKeyManager.markKeySuccess(keyPair.index);
 
-            // Xotira blokini yaratish (summary key bilan)
             if (currentUser) {
-                try {
-                    await createMemoryBlock(message, aiText, keyPair.summary);
-                } catch (memoryError) {
-                    console.error("Xotira bloki yaratishda xato:", memoryError);
-                }
-
-                // Chatni saqlash
                 if (!currentChatId) {
                     const title = message.substring(0, 30) + (message.length > 30 ? '...' : '');
                     const chatDoc = await db.collection('users').doc(currentUser.uid).collection('chats').add({
@@ -1539,32 +1638,38 @@ async function sendMessage() {
                 await msgCol.add({ role: 'user', text: message, time: firebase.firestore.FieldValue.serverTimestamp() });
                 await msgCol.add({ role: 'ai', text: aiText, time: firebase.firestore.FieldValue.serverTimestamp() });
 
-                // Avto rename (chatHistory uzunligi 8 ga karrali bo'lsa)
+                // Xotira blokini yaratish (summary key bilan)
+                try {
+                    await createMemoryBlock(message, aiText, keyPair.summary);
+                } catch (memErr) {
+                    console.error("Xotira bloki yaratishda xato:", memErr);
+                }
+
                 if (chatHistory.length % 8 === 0) {
                     await autoRenameChat(keyPair.chat);
                 }
             }
 
-            // Muvaffaqiyatli bo'lsa sikldan chiqish
             resetSendButton();
-            return;
+            return; // muvaffaqiyatli tugadi
+// Bu qism sendMessage funksiyasi oxirida bo'lishi kerak
+messageCounter++;
 
+if (messageCounter === 1 || messageCounter % 5 === 0) {
+    // 1-xabarda yoki har 5-xabarda nomni yangilash
+    // Oxirgi 3 ta xabarni kontekst sifatida olamiz (umumiyroq nom chiqishi uchun)
+    const context = chatHistory.slice(-3).map(m => m.content).join(" ");
+    generateChatTitle(currentChatId, context);
+}
         } catch (error) {
-            lastError = error;
-            
-            // Abort xatosi bo'lsa to'xtatish
             if (error.name === "AbortError") {
-                console.log("So'rov bekor qilindi");
+                console.log("So‘rov bekor qilindi");
                 resetSendButton();
                 return;
             }
 
-            console.error(`❌ Xatolik (urinish ${attempts + 1}):`, error.message);
+            console.error(`❌ Xatolik (urinish ${attempts+1}):`, error.message);
 
-            // Xatolik turini tekshirish
-            const isRateLimit = apiKeyManager.isRateLimitError(error);
-            
-            // Keyni failed deb belgilash
             const currentKeyPair = apiKeyManager.keyPairs[apiKeyManager.currentIndex - 1];
             if (currentKeyPair) {
                 apiKeyManager.markKeyFailed(currentKeyPair.index);
@@ -1572,29 +1677,24 @@ async function sendMessage() {
 
             attempts++;
 
-            // Agar barcha urinishlar tugasa
             if (attempts >= maxAttempts) {
-                console.error("❌ Barcha API kalitlar sinab ko'rildi");
-                
-                // Rate limit xatosi bo'lsa, biroz kutib keyin qayta urinish
-                if (isRateLimit) {
-                    renderMsg("⚡ Ko'p so'rov yuborildi. Biroz kuting va qayta urinib ko'ring...", 'ai');
+                // barcha kalitlar tugadi
+                if (apiKeyManager.isRateLimitError(error)) {
+                    renderMsg("⚡ Ko‘p so‘rov yuborildi. Biroz kuting va qayta urinib ko‘ring.", 'ai');
                 } else {
-                    renderMsg("❌ Hozircha xizmatda texnik nosozlik. Iltimos, keyinroq urinib ko'ring.", 'ai');
+                    renderMsg("❌ Hozircha xizmatda texnik nosozlik. Iltimos, keyinroq urinib ko‘ring.", 'ai');
                 }
-                
                 resetSendButton();
                 return;
             }
 
-            // Keyingi urinishdan oldin qisqa kutish
-            await new Promise(resolve => setTimeout(resolve, 500 * attempts));
+            // keyingi urinishdan oldin qisqa kutish
+            await new Promise(r => setTimeout(r, 500 * attempts));
         }
     }
-
     resetSendButton();
 }
-
+// ==================== AUTO RENAME CHAT ====================
 // ==================== AUTO RENAME CHAT ====================
 async function autoRenameChat(apiKey) {
     if (!currentChatId || chatHistory.length < 4) return;
@@ -1629,8 +1729,7 @@ async function autoRenameChat(apiKey) {
         console.error("Sarlavha yangilashda xatolik:", e); 
     }
 }
-
-// ==================== AUDIO PLAYER ====================
+// ==================== AUDIO PLAYER (TO'LIQ FIX) ====================
 function speakText(btn) {
     const bubble = btn.closest('.bubble');
     const textElement = bubble.querySelector('.ai-text');
@@ -1641,17 +1740,20 @@ function speakText(btn) {
     const fill = document.getElementById('toast-fill');
     const pauseBtn = document.getElementById('audio-pause-btn');
     
+    // AGAR: Shu matn o'qilayotgan bo'lsa va pauza qilingan bo'lsa - davom ettir
     if (currentText === text && isAudioPaused && currentUtterance) {
         window.speechSynthesis.resume();
         pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         pauseBtn.classList.remove('paused');
         isAudioPaused = false;
         
+        // Speaker tugmasini aktiv holatga qaytarish
         document.querySelectorAll('.speaker-btn').forEach(b => b.classList.remove('active'));
         if (currentSpeakerBtn) currentSpeakerBtn.classList.add('active');
         return;
     }
     
+    // AGAR: Aynan shu tugma active bo'lsa va audio o'qilayotgan bo'lsa - PAUZA QIL
     if (btn.classList.contains('active') && !isAudioPaused && currentUtterance) {
         window.speechSynthesis.pause();
         pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
@@ -1660,6 +1762,7 @@ function speakText(btn) {
         return;
     }
     
+    // AGAR: Boshqa matn yoki yangi boshlash
     window.speechSynthesis.cancel();
     if (currentInterval) clearInterval(currentInterval);
     
@@ -1667,19 +1770,23 @@ function speakText(btn) {
     isAudioPaused = false;
     currentSpeakerBtn = btn;
     
+    // Tugmalarni yangilash
     document.querySelectorAll('.speaker-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     
+    // Playerni ko'rsatish
     player.classList.add('show');
     fill.style.width = '0%';
     pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
     pauseBtn.classList.remove('paused');
 
+    // Speech synthesis
     currentUtterance = new SpeechSynthesisUtterance(text);
     currentUtterance.lang = text.match(/[a-zA-Z]/) ? 'en-US' : 'uz-UZ';
     currentUtterance.rate = 1.0;
     currentUtterance.pitch = 1.0;
     
+    // Progress barni hisoblash
     const wordsPerMinute = 150;
     const wordCount = text.split(/\s+/).length;
     const durationMs = (wordCount / wordsPerMinute) * 60 * 1000;
@@ -1717,11 +1824,13 @@ function toggleAudioPause() {
     const pauseBtn = document.getElementById('audio-pause-btn');
     
     if (isAudioPaused) {
+        // Davom ettirish
         window.speechSynthesis.resume();
         pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         pauseBtn.classList.remove('paused');
         isAudioPaused = false;
     } else {
+        // Pauza qilish
         window.speechSynthesis.pause();
         pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         pauseBtn.classList.add('paused');
@@ -1730,14 +1839,18 @@ function toggleAudioPause() {
 }
 
 function closeAudioPlayer() {
+    // Audio to'xtatish
     window.speechSynthesis.cancel();
     if (currentInterval) clearInterval(currentInterval);
     
+    // Playerni yashirish
     const player = document.getElementById('floating-audio-player');
     player.classList.remove('show');
     
+    // Speaker tugmalarini deaktivatsiya qilish
     document.querySelectorAll('.speaker-btn').forEach(b => b.classList.remove('active'));
     
+    // Reset qilish
     document.getElementById('toast-fill').style.width = '0%';
     currentUtterance = null;
     isAudioPaused = false;
@@ -1745,6 +1858,7 @@ function closeAudioPlayer() {
     currentSpeakerBtn = null;
 }
 
+// X tugma uchun alohida funksiya
 function closeAudioPlayerWithX() {
     closeAudioPlayer();
 }
@@ -1848,7 +1962,46 @@ function resetSendButton() {
 
 // ==================== INIT ====================
 console.log("🚀 MR AI ULTRA yuklandi!");
+async function generateChatTitle(chatId, contextText) {
+    if (!chatId) return;
+
+    const keyPair = apiKeyManager.getNextKeyPair();
+    if (!keyPair) return;
+
+    try {
+        const response = await fetch(PROVIDERS.chat.url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${keyPair.chat}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: PROVIDERS.chat.model,
+                messages: [
+                    { role: "system", content: "Siz suhbatga qisqa va umumiy nom beruvchi yordamchisiz. Maksimal 2-3 so'zdan iborat umumiy nom bering. Faqat nomni qaytaring." },
+                    { role: "user", content: `Ushbu xabarlar asosida suhbatga umumiy nom bering: ${contextText.substring(0, 400)}` }
+                ],
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+        const newTitle = data.choices[0].message.content.replace(/["'*:?]/g, '').trim();
+
+        // Firestore-da yangilash
+        await db.collection('users').doc(currentUser.uid).collection('chats').doc(chatId).update({
+            title: newTitle
+        });
+        
+        // UI-da sarlavhani yangilash
+        const headerTitle = document.getElementById('chat-header-title');
+        if (headerTitle) headerTitle.innerText = newTitle;
+
+    } catch (err) {
+        console.error("Nom berishda xatolik:", err);
+    }
+}
 </script>
 
 </body>
-</html>
+</html> 
